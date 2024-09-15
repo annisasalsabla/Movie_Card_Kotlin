@@ -13,6 +13,9 @@
         android:theme="@style/Theme.MovieCard"
         tools:targetApi="31">
         <activity
+            android:name=".PhotoDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".RecycleViewCardMovie"
             android:exported="false" />
         <activity

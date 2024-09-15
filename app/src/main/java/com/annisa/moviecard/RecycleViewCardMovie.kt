@@ -1,7 +1,7 @@
 package com.annisa.moviecard
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -12,22 +12,25 @@ import com.annisa.moviecard.model.ModelMovie
 
 
 class RecycleViewCardMovie : AppCompatActivity() {
-
-    private var recyclerView : RecyclerView? = null
-    private var movieAdapter : MovieAdapter? = null
+    private var recycleview: RecyclerView? = null
+    private var movieAdapter: MovieAdapter? = null
     private var movieList = mutableListOf<ModelMovie>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_recycle_view_card)
 
-        movieList = ArrayList()
-        recyclerView = findViewById(R.id.rvMovieList) as RecyclerView
-        movieAdapter = MovieAdapter(this, movieList)
-        val layoutManager : RecyclerView.LayoutManager = GridLayoutManager(this, 2)
-        recyclerView!!.layoutManager = layoutManager
-        recyclerView!!.adapter = movieAdapter
+        recycleview = findViewById(R.id.rvMovieList) as RecyclerView
+
+        movieAdapter = MovieAdapter(this@RecycleViewCardMovie, movieList) { position ->
+            // Call the method to show details of the movie at the clicked position
+            showDetailDialog(position)
+        }
+
+
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, 2)
+        recycleview!!.layoutManager = layoutManager
+        recycleview!!.adapter = movieAdapter
 
         prepareMovieList()
 
@@ -62,7 +65,12 @@ class RecycleViewCardMovie : AppCompatActivity() {
         movieList.add(movie)
 
         movieAdapter!!.notifyDataSetChanged()
+    }
 
-
+    private fun showDetailDialog(position: Int) {
+        val intent = Intent(this, PhotoDetailActivity::class.java) // Pastikan kelas "PhotoDetail" benar
+        intent.putExtra("imageResId", movieList[position].image) // Mengirim imageResId ke Activity PhotoDetail
+        intent.putExtra("title", movieList[position].title)
+        startActivity(intent)
     }
 }
