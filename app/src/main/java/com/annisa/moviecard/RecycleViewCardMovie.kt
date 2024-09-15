@@ -2,6 +2,7 @@ package com.annisa.moviecard
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -9,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.annisa.moviecard.adapter.MovieAdapter
 import com.annisa.moviecard.model.ModelMovie
-
 
 class RecycleViewCardMovie : AppCompatActivity() {
     private var recycleview: RecyclerView? = null
@@ -23,10 +23,12 @@ class RecycleViewCardMovie : AppCompatActivity() {
         recycleview = findViewById(R.id.rvMovieList) as RecyclerView
 
         movieAdapter = MovieAdapter(this@RecycleViewCardMovie, movieList) { position ->
+            // Show a Toast notification
+            Toast.makeText(this, "Anda memilih: ${movieList[position].title}", Toast.LENGTH_SHORT).show()
+
             // Call the method to show details of the movie at the clicked position
             showDetailDialog(position)
         }
-
 
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(this, 2)
         recycleview!!.layoutManager = layoutManager
@@ -68,8 +70,8 @@ class RecycleViewCardMovie : AppCompatActivity() {
     }
 
     private fun showDetailDialog(position: Int) {
-        val intent = Intent(this, PhotoDetailActivity::class.java) // Pastikan kelas "PhotoDetail" benar
-        intent.putExtra("imageResId", movieList[position].image) // Mengirim imageResId ke Activity PhotoDetail
+        val intent = Intent(this, PhotoDetailActivity::class.java)
+        intent.putExtra("imageResId", movieList[position].image)
         intent.putExtra("title", movieList[position].title)
         startActivity(intent)
     }
